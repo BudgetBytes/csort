@@ -41,13 +41,10 @@ void swap(int *a, int *b) {
 }
 
 void bubblesort(int *arr, size_t capacity) {
-  for (size_t i = 0; i < capacity - 1; ++i) {
-    int *curr = &arr[i];
-    int *next = &arr[i+1];
-    if (*curr > *next) 
-      swap(curr, next);
-  }
-  if (!is_ordered(arr, capacity)) bubblesort(arr, capacity); 
+  for (size_t i = capacity - 1; i > 1; --i)
+    for (size_t j = 0; j < i; ++j)
+      if (arr[j] > arr[j+1])
+        swap(&arr[j], &arr[j+1]);
 }
 
 int compare(const void *a, const void *b) {
