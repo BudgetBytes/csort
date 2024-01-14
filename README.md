@@ -1,5 +1,5 @@
 # Csort
 ## This project is unfinished
 ```console
-./build.sh && ./main <alg>
+./build.sh && ./main <algorithm>
 ```
