@@ -11,21 +11,98 @@ void swap(int *a, int *b) {
   *b = t;
 }
 
-void selection_sort(int *arr, size_t capacity) {
-  for (size_t i = 0; i < capacity; ++i) {
-    int min = arr[i];
-    size_t index = 0;
-    for (size_t j = i; j < capacity; ++j) {
-      if (arr[j] < min) {
-        min = arr[j];
-        index = j;
-      }
+// void merge(int *arr, size_t l, size_t m, size_t r) {
+//   size_t l_length = m - l + 1;
+//   size_t r_length = r - m;
+
+//   size_t tmp_left[l_length];
+//   size_t tmp_right[r_length];
+
+
+//   for (size_t i = 0; i < l_length; ++i) {
+//     tmp_left[i] = arr[l + i];
+//   }
+//   for (size_t i = 0; i < r_length; ++i) {
+//     tmp_right[i] = arr[m + 1 + i];
+//   }
+
+//   for (size_t i = 0, j = 0, k = l; k <= r; ++k) {
+//     if (((i < l_length) && (j >= r_length)) || (tmp_left[i] <= tmp_right[j])) {
+//       arr[k] = tmp_left[i];
+//       ++i;
+//     } else {
+//       arr[k] = tmp_right[j];
+//       ++j;
+//     }
+//   }
+// }
+
+// void merge_sort_recursion(int *arr, size_t l, size_t r) {
+
+//   if (l < r) {
+//     size_t m = (l + r) / 2;
+//     
+//     merge_sort_recursion(arr, l, m);
+//     merge_sort_recursion(arr, m + 1, r);
+//     
+//     merge(arr, l, m, r);
+
+//   }
+
+// }
+
+// void merge_sort(int *arr, size_t capacity) {
+//   merge_sort_recursion(arr, 0, capacity - 1);
+// }
+
+
+
+
+void merge_sorted_arrays(int a[], size_t l, size_t m, size_t r)
+{
+  size_t left_length = m - l + 1;
+  size_t right_length = r - m;
+  
+  size_t temp_left[left_length];
+  size_t temp_right[right_length];
+  
+  size_t i, j, k;
+  
+  for (size_t i = 0; i < left_length; i++)
+    temp_left[i] = a[l + i];
+  
+  for (size_t i = 0; i < right_length; i++)
+    temp_right[i] = a[m + 1 + i];
+  
+  for (i = 0, j = 0, k = l; k <= r; k++) {
+    if ((i < left_length) && (j >= right_length || temp_left[i] <= temp_right[j])) {
+      a[k] = temp_left[i];
+      i++;
     }
-    if (min != arr[i]) {
-      swap(&arr[i], &arr[index]);
+    else {
+      a[k] = temp_right[j];
+      j++;
     }
+  }  
+}
+
+
+void merge_sort_recursion(int a[], size_t l, size_t r)
+{
+  if (l < r) {
+    size_t m = l + (r - l) / 2;
+  
+    merge_sort_recursion(a, l, m);
+    merge_sort_recursion(a, m + 1, r);
+    merge_sorted_arrays(a, l, m, r);
   }
 }
+
+void merge_sort(int a[], size_t length) 
+{
+  merge_sort_recursion(a, 0, length - 1);
+}
+
 
 void insertion_sort(int *arr, size_t capacity) {
   for (size_t i = 0; i < capacity - 1; ++i){
@@ -34,6 +111,20 @@ void insertion_sort(int *arr, size_t capacity) {
       for (size_t j = i; j > 0 && arr[j] < arr[j-1]; --j) {  
         swap(&arr[j], &arr[j - 1]);
       }
+    }
+  }
+}
+
+void selection_sort(int *arr, size_t capacity) {
+  for (size_t i = 0; i < capacity; ++i) {
+    int *min = &arr[i];
+    for (size_t j = i; j < capacity; ++j) {
+      if (arr[j] < *min) {
+        min = &arr[j];
+      }
+    }
+    if (*min != arr[i]) {
+      swap(&arr[i], min);
     }
   }
 }
@@ -106,10 +197,12 @@ int main(int argc, char **argv)  {
     printf("TODO: Not implemented");
   } else if (strcmp("bubblesort", algo) == 0) {
     benchmark(bubblesort, arr, capacity);
-  } else if (strcmp("insertionsort", algo) == 0) {
-    benchmark(insertion_sort, arr, capacity);
   } else if (strcmp("selectionsort", algo) == 0) {
     benchmark(selection_sort, arr, capacity);
+  } else if (strcmp("insertionsort", algo) == 0) {
+    benchmark(insertion_sort, arr, capacity);
+  } else if (strcmp("mergesort", algo) == 0) {
+    benchmark(merge_sort, arr, capacity);
   }
 
   else {
