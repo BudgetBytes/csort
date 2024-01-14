@@ -11,53 +11,9 @@ void swap(int *a, int *b) {
   *b = t;
 }
 
-// void merge(int *arr, size_t l, size_t m, size_t r) {
-//   size_t l_length = m - l + 1;
-//   size_t r_length = r - m;
 
-//   size_t tmp_left[l_length];
-//   size_t tmp_right[r_length];
-
-
-//   for (size_t i = 0; i < l_length; ++i) {
-//     tmp_left[i] = arr[l + i];
-//   }
-//   for (size_t i = 0; i < r_length; ++i) {
-//     tmp_right[i] = arr[m + 1 + i];
-//   }
-
-//   for (size_t i = 0, j = 0, k = l; k <= r; ++k) {
-//     if (((i < l_length) && (j >= r_length)) || (tmp_left[i] <= tmp_right[j])) {
-//       arr[k] = tmp_left[i];
-//       ++i;
-//     } else {
-//       arr[k] = tmp_right[j];
-//       ++j;
-//     }
-//   }
-// }
-
-// void merge_sort_recursion(int *arr, size_t l, size_t r) {
-
-//   if (l < r) {
-//     size_t m = (l + r) / 2;
-//     
-//     merge_sort_recursion(arr, l, m);
-//     merge_sort_recursion(arr, m + 1, r);
-//     
-//     merge(arr, l, m, r);
-
-//   }
-
-// }
-
-// void merge_sort(int *arr, size_t capacity) {
-//   merge_sort_recursion(arr, 0, capacity - 1);
-// }
-
-
-
-
+// Merge sort is copied from here
+// https://github.com/portfoliocourses/c-example-code/blob/main/merge_sort.c
 void merge_sorted_arrays(int a[], size_t l, size_t m, size_t r)
 {
   size_t left_length = m - l + 1;
