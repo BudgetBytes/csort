@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-#define CAPACITY 10000 * 1000
+#define CAPACITY 10000
 static int arr[CAPACITY];
 
 void swap(int *a, int *b) 
@@ -20,51 +20,68 @@ int compare(const void *a, const void *b)
     return (*(int*)a - *(int*)b);
 }
 
-void quick_sort(int *a, size_t capacity) {
+void quick_sort(int *a, size_t capacity) 
+{
     qsort(a, capacity, sizeof(int), compare);
 }
 
-// Merge sort is copied from here
-// https://github.com/portfoliocourses/c-example-code/blob/main/merge_sort.c
-void merge_sorted_arrays(int a[], size_t l, size_t m, size_t r)
-{
-    size_t left_length = m - l + 1;
-    size_t right_length = r - m;
+void merge(int a[], int beg, int mid, int end)    
+{    
+    int i, j, k;  
+    int n1 = mid - beg + 1;    
+    int n2 = end - mid;    
+      
+    int *left_array = malloc(sizeof(int) * n1);
+    int *right_array = malloc(sizeof(int) * n2);
+      
+    for (int i = 0; i < n1; i++)    
+        left_array[i] = a[beg + i];    
+    for (int j = 0; j < n2; j++)    
+        right_array[j] = a[mid + 1 + j];    
+      
+    i = 0;     
+    j = 0; 
+    k = beg;
+      
+    while (i < n1 && j < n2) {    
+        if(left_array[i] <= right_array[j]) {    
+            a[k] = left_array[i];    
+            i++;    
+        }    
+        else {    
+            a[k] = right_array[j];    
+            j++;    
+        }    
+        k++;    
+    }    
 
-    size_t temp_left[left_length];
-    size_t temp_right[right_length];
+    while (i<n1) {    
+        a[k] = left_array[i];    
+        i++;    
+        k++;    
+    }    
+      
+    while (j<n2) {    
+        a[k] = right_array[j];    
+        j++;    
+        k++;    
+    }    
 
-    size_t i, j, k;
-
-    for (size_t i = 0; i < left_length; i++)
-        temp_left[i] = a[l + i];
-
-    for (size_t i = 0; i < right_length; i++)
-        temp_right[i] = a[m + 1 + i];
-
-    for (i = 0, j = 0, k = l; k <= r; k++) {
-        if ((i < left_length) && (j >= right_length || temp_left[i] <= temp_right[j])) {
-            a[k] = temp_left[i];
-            i++;
-        }
-        else {
-            a[k] = temp_right[j];
-            j++;
-        }
-    }  
-}
-
-
-void merge_sort_recursion(int a[], size_t l, size_t r)
-{
-    if (l < r) {
-        size_t m = l + (r - l) / 2;
+    free(left_array);
+    free(right_array);
+}    
   
-        merge_sort_recursion(a, l, m); 
-        merge_sort_recursion(a, m + 1, r);
-        merge_sorted_arrays(a, l, m, r);
-    }
-}
+void merge_sort_recursion(int a[], int beg, int end)  
+{  
+    if (beg < end)   
+    {  
+        int mid = (beg + end) / 2;  
+        merge_sort_recursion(a, beg, mid);  
+        merge_sort_recursion(a, mid + 1, end);  
+        merge(a, beg, mid, end);  
+    }  
+}  
+  
 
 void merge_sort(int a[], size_t capacity) 
 {
@@ -165,6 +182,8 @@ int main(int argc, char **argv)
     }
 
     poppulate_arr(arr, CAPACITY);
+
+
 
     if (strcmp("bubblesort", algo) == 0) {
         benchmark(bubblesort, arr, CAPACITY);
