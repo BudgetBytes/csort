@@ -59,18 +59,19 @@ void merge_sort(int a[], size_t length)
   merge_sort_recursion(a, 0, length - 1);
 }
 
-
-void insertion_sort(int *arr, size_t capacity) {
-  for (size_t i = 0; i < capacity - 1; ++i){
-    if (arr[i] > arr[i+1]) {
-      swap(&arr[i], &arr[i+1]);
-      for (size_t j = i; j > 0 && arr[j] < arr[j-1]; --j) {  
-        swap(&arr[j], &arr[j - 1]);
-      }
+void insertion_sort(int *arr, size_t capacity)
+{
+  for (size_t i = 1; i < capacity; ++i) {
+    int key = arr[i];
+    int j = (int)i - 1;
+    while (j >= 0 && arr[j] > key) {
+        arr[j + 1] = arr[j];
+        --j;
     }
+    arr[j + 1] = key;
   }
 }
-
+ 
 void selection_sort(int *arr, size_t capacity) {
   for (size_t i = 0; i < capacity; ++i) {
     int *min = &arr[i];
@@ -153,10 +154,10 @@ int main(int argc, char **argv)  {
     printf("TODO: Not implemented");
   } else if (strcmp("bubblesort", algo) == 0) {
     benchmark(bubblesort, arr, capacity);
-  } else if (strcmp("selectionsort", algo) == 0) {
-    benchmark(selection_sort, arr, capacity);
   } else if (strcmp("insertionsort", algo) == 0) {
     benchmark(insertion_sort, arr, capacity);
+  } else if (strcmp("selectionsort", algo) == 0) {
+    benchmark(selection_sort, arr, capacity);
   } else if (strcmp("mergesort", algo) == 0) {
     benchmark(merge_sort, arr, capacity);
   }
