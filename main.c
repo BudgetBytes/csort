@@ -5,18 +5,26 @@
 #include <string.h>
 #include <time.h>
 
-void print_result(int *arr, size_t capacity) {
-  printf("{");
-  for (size_t i = 0; i < capacity; ++i) {
-    printf(" %d ", arr[i]);
-  }
-  printf("}");
-}
-
 void swap(int *a, int *b) {
   int t = *a;
   *a = *b;
   *b = t;
+}
+
+void selection_sort(int *arr, size_t capacity) {
+  for (size_t i = 0; i < capacity; ++i) {
+    int min = arr[i];
+    size_t index = 0;
+    for (size_t j = i; j < capacity; ++j) {
+      if (arr[j] < min) {
+        min = arr[j];
+        index = j;
+      }
+    }
+    if (min != arr[i]) {
+      swap(&arr[i], &arr[index]);
+    }
+  }
 }
 
 void insertion_sort(int *arr, size_t capacity) {
@@ -54,10 +62,27 @@ bool is_ordered(int *arr, size_t capacity) {
   return true;
 }
 
+void print_result(int *arr, size_t capacity) {
+  printf("{");
+  for (size_t i = 0; i < capacity; ++i) {
+    printf(" %d ", arr[i]);
+  }
+  printf("}");
+}
+
+void benchmark(void (*algo)(int *, size_t), int* arr, size_t capacity) {
+  float start = (float) clock()/CLOCKS_PER_SEC;
+  (*algo)(arr, capacity);
+  float end = (float) clock()/CLOCKS_PER_SEC;
+
+  printf("INFO: Elapsed time: %fs\n", end - start);
+  printf("INFO: The array is now ordered: %s", is_ordered(arr, capacity) ? "True" : "False");
+  // print_result(arr, capacity);
+}
 
 void usage(char *program) {
-  printf("USAGE: %s <algoorythm>\n", program);
-  printf("algoORYTHMS: \n");
+  printf("USAGE: %s <algorithm>\n", program);
+  printf("ALGORITHMS: \n");
   printf("  quicksort\n");
   printf("  bubblesort\n");
 }
@@ -78,27 +103,13 @@ int main(int argc, char **argv)  {
   poppulate_arr(arr, capacity);
 
   if (strcmp("quicksort", algo) == 0) {
-    float start = (float) clock()/CLOCKS_PER_SEC;
-    qsort(arr, capacity, sizeof(int), compare);
-    float end = (float) clock()/CLOCKS_PER_SEC;
-
-    printf("INFO: Elapsed time: %fs\n", end - start);
-    // print_result(arr, capacity);
-    
+    printf("TODO: Not implemented");
   } else if (strcmp("bubblesort", algo) == 0) {
-    float start = (float) clock()/CLOCKS_PER_SEC;
-    bubblesort(arr, capacity);
-    float end = (float) clock()/CLOCKS_PER_SEC;
-
-    printf("INFO: Elapsed time: %fs\n", end - start);
-    // print_result(arr, capacity);
-    
+    benchmark(bubblesort, arr, capacity);
   } else if (strcmp("insertionsort", algo) == 0) {
-    float start = (float)clock()/CLOCKS_PER_SEC;
-    insertion_sort(arr, capacity);
-    float end = (float) clock()/CLOCKS_PER_SEC;
-    
-    printf("INFO: Elapsed time: %f\n", end - start);
+    benchmark(insertion_sort, arr, capacity);
+  } else if (strcmp("selectionsort", algo) == 0) {
+    benchmark(selection_sort, arr, capacity);
   }
 
   else {
