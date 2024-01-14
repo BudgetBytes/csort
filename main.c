@@ -5,10 +5,23 @@
 #include <string.h>
 #include <time.h>
 
-void swap(int *a, int *b) {
+#define CAPACITY 10000 * 1000
+static int arr[CAPACITY];
+
+void swap(int *a, int *b) 
+{
     int t = *a;
     *a = *b;
     *b = t;
+}
+
+int compare(const void *a, const void *b) 
+{
+    return (*(int*)a - *(int*)b);
+}
+
+void quick_sort(int *a, size_t capacity) {
+    qsort(a, capacity, sizeof(int), compare);
 }
 
 // Merge sort is copied from here
@@ -53,9 +66,9 @@ void merge_sort_recursion(int a[], size_t l, size_t r)
     }
 }
 
-void merge_sort(int a[], size_t length) 
+void merge_sort(int a[], size_t capacity) 
 {
-    merge_sort_recursion(a, 0, length - 1);
+    merge_sort_recursion(a, 0, capacity - 1);
 }
 
 void insertion_sort(int *arr, size_t capacity)
@@ -93,15 +106,10 @@ void bubblesort(int *arr, size_t capacity)
                 swap(&arr[j], &arr[j+1]);
 }
 
-int compare(const void *a, const void *b) 
-{
-    return (*(int*)a - *(int*)b);
-}
-
 void poppulate_arr(int *arr, size_t capacity) 
 {
     for(size_t i = 0; i < capacity; ++i) {
-        arr[i] = rand()%100;
+        arr[i] = rand()%capacity;
     }
 }
 
@@ -137,10 +145,11 @@ void usage(char *program)
 {
     printf("USAGE: %s <algorithm>\n", program);
     printf("ALGORITHMS: \n");
-    printf("  quicksort\n");
-    printf("  bubblesort\n");
-    printf("  selectionsort\n");
-    printf("  insertionsort\n");
+    printf("            bubblesort\n");
+    printf("            selectionsort\n");
+    printf("            insertionsort\n");
+    printf("            mergesort\n");
+    printf("            quicksort\n");
 }
 
 int main(int argc, char **argv)  
@@ -155,22 +164,19 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    size_t capacity = 10000;
-    int arr[capacity];
-    poppulate_arr(arr, capacity);
+    poppulate_arr(arr, CAPACITY);
 
-    if (strcmp("quicksort", algo) == 0) {
-        printf("TODO: Not implemented");
-    } else if (strcmp("bubblesort", algo) == 0) {
-        benchmark(bubblesort, arr, capacity);
+    if (strcmp("bubblesort", algo) == 0) {
+        benchmark(bubblesort, arr, CAPACITY);
     } else if (strcmp("insertionsort", algo) == 0) {
-        benchmark(insertion_sort, arr, capacity);
+        benchmark(insertion_sort, arr, CAPACITY);
     } else if (strcmp("selectionsort", algo) == 0) {
-        benchmark(selection_sort, arr, capacity);
+        benchmark(selection_sort, arr, CAPACITY);
     } else if (strcmp("mergesort", algo) == 0) {
-        benchmark(merge_sort, arr, capacity);
+        benchmark(merge_sort, arr, CAPACITY);
+    } else if (strcmp("quicksort", algo) == 0) {
+        benchmark(quick_sort, arr, CAPACITY);
     }
-
     else {
         printf("ERROR: Invalid command: %s\n", algo);
         usage(program);
